@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  p search results money
+  p
+   div(class="container-fluid")
+        div(class="row")
+            -
+                let money  = [
+                    {
+                        "country": "united states of america",
+                        "currency": "dollar",
+                        "rate": 1
+                    },
+                    {
+                        "country": "india rupee",
+                        "currency":"rupee",
+                        "rate": 75
+                    },
+                    {
+                        "country": "england",
+                        "currency": "Gbp",
+                        "rate": 85
+                    },                   
+                ]
+            each v,index in money 
+                div(class="col-sm-2" onclick=`buy(${index})`) #{v.country}
+                div(class="col-sm-2" onclick=`buy(${index})`) #{v.currency}
+                div(class="col-sm-2" onclick=`buy(${index})`) #{v.rate}
+
+  script.                
+        function buy(intemNo)
+        {
+              alert(`you purchased Item ${intemNo+1}`)
+        }
