@@ -1,8 +1,15 @@
 var money = require('../models/money'); 
  
-// List of all moneys 
-exports.money_list = function(req, res) { 
-    res.send('NOT IMPLEMENTED: money list'); 
+// List of all Costumes 
+exports.money_list = async function(req, res) { 
+    try{ 
+        theMoney = await money.find(); 
+        res.send(theMoney); 
+    } 
+    catch(err){ 
+        res.status(500); 
+        res.send(`{"error": ${err}}`); 
+    }   
 }; 
  
 // for a specific money. 
