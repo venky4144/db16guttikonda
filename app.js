@@ -9,6 +9,8 @@ var usersRouter = require('./routes/users');
 var moneyRouter = require('./routes/money');
 var addmodsRouter = require('./routes/addmods');
 var selectorRouter = require('./routes/selector');
+var money = require("./models/money"); 
+var resourceRouter = require('./routes/resource');
 
 var app = express();
 
@@ -27,7 +29,7 @@ app.use('/users', usersRouter);
 app.use('/money', moneyRouter);
 app.use('/addmods', addmodsRouter);
 app.use('/selector', selectorRouter);
-
+app.use('/resource', resourceRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -45,4 +47,28 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+const connectionString = process.env.MONGO_CON
+
+mongoose = require('mongoose');
+mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true});
+
+async function recreateDB(){
+  // Delete everything
+  await money.deleteMany();
+ 
+ 
+  var results = [{country:"united states of america",currency:'dollar',rate:1},
+                 {country:"india",currency:'rupee',rate:75},
+                 {country:"england", currency:'rate',cost:85}]
+ 
+ for(i in results){
+  let instance = new money({country: results[i]["country"], currency: results[i]["currency"], rate:results[i]["rate"]});
+   instance.save( function(err,doc) {
+     if(err) return console.error(err);
+     console.log("object added.")
+     });
+ } 
+ } 
+ let reseed = true;
+ if (reseed) { recreateDB();} 
 module.exports = app;
