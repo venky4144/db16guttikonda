@@ -1,9 +1,7 @@
-var express = require('express');
-var router = express.Router();
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('money', { title: 'Search results for money' });
-});
-
-module.exports = router;
+var express = require('express'); 
+const money_controlers= require('../controllers/money'); 
+var router = express.Router(); 
+ 
+/* GET moneys */ 
+router.get('/', money_controlers.money_view_all_Page ); 
+module.exports = router; 
