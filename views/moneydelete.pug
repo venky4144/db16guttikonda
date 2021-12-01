@@ -1,0 +1,54 @@
+extends layout 
+ 
+block content 
+  h1= title 
+ 
+  if (toShow == null) 
+    h2 No instance to delete 
+  else 
+    - let moneyid = toShow._id 
+    - let money_type = toShow.country
+    - let moneycost = toShow.currency 
+    - let moneysize = toShow.rate 
+    - let actionid = "/resource/money/" + moneyid 
+    script let actionid = "#{actionid}" 
+    div 
+      div.row 
+        div(class='moneyAttr mr-3') money ID is: 
+        div #{moneyid} 
+      div.row 
+        div(class='moneyAttr mr-3') money Type is: 
+        div #{money_type} 
+      div.row 
+        div(class='moneyAttr mr-3') money Size is: 
+        div #{moneysize} 
+      div.row 
+        div(class='moneyAttr mr-3') money Cost is: 
+        div #{moneycost} 
+ 
+    button(class="btn btn-danger m-2" onclick="deleteOnid()") Delete 
+    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel 
+ 
+  script. 
+    function cancel() { 
+      // Go back to the home page for the money collection 
+      window.location.href='/moneys' 
+    } 
+  script. 
+    function deleteOnid() { 
+      console.log("starting delete") 
+      // delete first 
+      fetch(actionid, { 
+        method: 'DELETE'      // Don't need a body for the delete 
+      }).then((resp) => { 
+        return resp.json(); // or resp.text() or whatever the server sends 
+      }).then((body) => { 
+        alert("Delete succeded") 
+        window.location.href='/moneys' 
+        // TODO handle body 
+      }).catch((error) => { 
+        // TODO handle error 
+        alert("Delete failed " + error ) 
+      }); 
+    } 
+ 

@@ -27,5 +27,7 @@ router.get('/money/:id', money_controller.money_detail);
  
 // GET request for list of all money items. 
 router.get('/money', money_controller.money_list); 
+
+
  
 module.exports = router; 

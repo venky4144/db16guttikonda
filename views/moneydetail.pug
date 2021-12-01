@@ -1,0 +1,22 @@
+extends layout 
+ 
+block content 
+  h1= title 
+ 
+  - let moneyid = toShow._id 
+  - let money_type = toShow.country 
+  - let moneycost = toShow.currency 
+  - let moneysize = toShow.rate 
+  div 
+    div.row 
+      div(class='moneyAttr mr-3') Money ID is: 
+      div #{moneyid} 
+    div.row 
+      div(class='moneyAttr mr-3') Money Country is: 
+      div #{money_type} 
+    div.row 
+      div(class='moneyAttr mr-3') Money Currency is: 
+      div #{moneysize} 
+    div.row 
+      div(class='moneyAttr mr-3') Money Cost is: 
+      div #{moneycost} 

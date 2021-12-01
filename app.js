@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var passport = require('passport'); 
+var LocalStrategy = require('passport-local').Strategy; 
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -13,6 +15,39 @@ var money = require("./models/money");
 var resourceRouter = require('./routes/resource');
 
 var app = express();
+
+passport.use(new LocalStrategy( 
+  function(username, password, done) { 
+    Account.findOne({ username: username }, function (err, user) { 
+      if (err) { return done(err); } 
+      if (!user) { 
+        return done(null, false, { message: 'Incorrect username.' }); 
+      } 
+      if (!user.validPassword(password)) { 
+        return done(null, false, { message: 'Incorrect password.' }); 
+      } 
+      return done(null, user); 
+    }); 
+  } ));
+
+  app.use(require('express-session')({ 
+    secret: 'keyboard cat', 
+    resave: false, 
+    saveUninitialized: false 
+  })); 
+  app.use(passport.initialize()); 
+  app.use(passport.session()); 
+
+  // passport config 
+// Use the existing connection 
+// The Account model  
+var Account =require('./models/account'); 
+ 
+passport.use(new LocalStrategy(Account.authenticate())); 
+passport.serializeUser(Account.serializeUser()); 
+passport.deserializeUser(Account.deserializeUser()); 
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,6 +65,7 @@ app.use('/money', moneyRouter);
 app.use('/addmods', addmodsRouter);
 app.use('/selector', selectorRouter);
 app.use('/resource', resourceRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -50,6 +86,7 @@ app.use(function(err, req, res, next) {
 const connectionString = process.env.MONGO_CON
 
 mongoose = require('mongoose');
+var bodyParser = require('body-parser')
 mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true});
 
 async function recreateDB(){
@@ -57,9 +94,9 @@ async function recreateDB(){
   await money.deleteMany();
  
  
-  var results = [{country:"united states of america",currency:'dollar',rate:1},
-                 {country:"india",currency:'rupee',rate:75},
-                 {country:"england", currency:'rate',cost:85}]
+  var results = [{country:"united states of america",currency:'dollar',rate:21},
+                 {country:"japan",currency:'yen',rate:39},
+                 {country:"england", currency:'gbp',rate:25}]
  
  for(i in results){
   let instance = new money({country: results[i]["country"], currency: results[i]["currency"], rate:results[i]["rate"]});

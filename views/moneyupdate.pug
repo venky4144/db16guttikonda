@@ -1,0 +1,43 @@
+extends layout 
+ 
+block content 
+  h1= title 
+ 
+  - let moneyid = toShow._id 
+  - let money_type = toShow.country
+  - let moneycost = toShow.currency 
+  - let moneysize = toShow.rate 
+   
+  div.row(class='mb-2') 
+    div.mr-1 ID is 
+    div #{moneyid} 
+  - let actionid = "/resource/money/" + moneyid 
+  form(id='moneyForm', action= actionid, method="PUT") 
+    div.form-group 
+        label.moneyAttr(for='country') money type 
+        input#money_type(type='text', name='country', value= money_type ) 
+    div.form-group 
+        label.moneyAttr(for='currency') money currency
+        input#size(type='text', name='currency', value= moneycost ) 
+    div.form-group 
+        label.moneyAttr(for='rate') money rate 
+        input#cost(type='number', name='rate', value= moneysize ) 
+    input(type="submit") 
+ 
+  script. 
+    document.forms['moneyForm'].addEventListener('submit', (event) => { 
+      event.preventDefault(); 
+      // TODO do something here to show user that form is being submitted 
+      fetch(event.target.action, { 
+        method: 'PUT', 
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form 
+      }).then((resp) => { 
+        return resp.json(); // or resp.text() or whatever the server sends 
+      }).then((body) => { 
+        alert("Update succeded") 
+        // TODO handle body 
+      }).catch((error) => { 
+        // TODO handle error 
+        alert("Update failed " + error ) 
+      }); 
+    }); 

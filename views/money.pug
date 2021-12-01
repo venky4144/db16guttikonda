@@ -3,6 +3,24 @@ extends layout
 block content
   h1= title
   - let items = results
+  div(class="container-fluid") 
+    div(class="row m-1") 
+      each item in items
+       - let destination = `dispatch(\"/money/update?id=${item._id}\")` 
+       - let detail = `dispatch(\"/money/detail/?id=${item._id}")`
+       - let deleteItem = `dispatch(\"/money/delete/?id=${item._id}")` 
+
+      
+       div(class="row-sm-2", class="m-1") Item #{item.country}(#{item.currency}) is #{item.rate} 
+          button.btn( class="btn-success ml-1", onclick= destination) Update
+          button.btn( class="btn-success", onclick= detail, style="margin-left: 30px;") Details
+          button.btn( class="btn-success", onclick= deleteItem, style="margin-left: 30px;") Delete
+       
+   
+  script. 
+    function dispatch(path){ 
+      window.location.href=path 
+    } 
   p Search Results Money 
   p 
   div(class="container-fluid")
